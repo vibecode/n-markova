@@ -1,5 +1,6 @@
 require('dotenv').config()
 const config = require('./config')
+const data = require('./data/natasha')
 
 const Telegraf = require('telegraf')
 const generateReply = require('./handlers/generateReply')
@@ -12,22 +13,54 @@ bot.telegram
      bot.options.username = botInfo.username
    })
 
-bot.hears(/^.*быти.*$/gm, async ctx => {
-  await ctx.reply('ты поехавший, да?')
-  await ctx.reply('еще раз')
-  await ctx.reply('мое бытие проявлено')
-  await ctx.reply('не доходит все еще?')
+bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
+  try {
+    await sayInRow(data.bytie, ctx, {reply_to_message_id: ctx.message.message_id})
+  } catch (err) {
+    console.log(err)
+  }
 })
 
-bot.hears(/^.*онтологи.*$/, ctx => {
-  generateReply(ctx, ctx.message.text)
+bot.mention('natassha_bot', async ctx => {
+  try {
+    const phrases = data.bytie.slice(1)
+    await sayInRow(phrases, ctx, {reply_to_message_id: ctx.message.message_id})
+  } catch (err) {
+    console.log(err)
+  }
 })
 
-bot.on("message", ctx => {
-  generateReply(ctx, ctx.message.text)
+//TODO update phrase
+bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', {reply_to_message_id: ctx.message.message_id}))
+
+bot.hears([/^.*[Оо]нтолог.*$/gm, /^.*[Мм]аг.*$/gm,/^.*[Рр]изом.*$/gm, /^.*тел.*$/gm, /^.*орган.*$/gm, /^.*письм.*$/gm, /^.*анус.*$/gm, /^.*[Дд]еррид.*$/gm, /^.*[Дд]елез.*$/gm], ctx => {
+  generateReply(ctx, ctx.match,  {reply_to_message_id: ctx.message.message_id})
 })
 
-//TODO выяснить почему не работает
-// bot.mention('muflisme', ctx => ctx.reply('hi'))
+bot.hears([/^.*[Хх]ох.*$/gm,  /^.*[Уу]кр.*$/gm], ctx => {
+  generateReply(ctx, ctx.match, {reply_to_message_id: ctx.message.message_id})
+})
+
+bot.command("nat", ctx => {
+    generateReply(ctx)
+})
+
+bot.hears([/^.*[Лл]еня.*$/gm,  /^.*[Лл]еони.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
+  try {
+    await ctx.replyWithSticker('CAADBQADRwADRWMpEsuzZEkvMI9UAg')
+  } catch (err) {
+    console.log(err);
+  }
+})
+
+bot.on('sticker', ctx => console.log(ctx.message.sticker))
 
 bot.startPolling()
+
+async function sayInRow(phrasesArr, ctx, opts) {
+  await ctx.reply(phrasesArr[0], opts)
+
+  for (let i = 1; i < phrasesArr.length; i++) {
+    await ctx.reply(phrasesArr[i])
+  }
+}

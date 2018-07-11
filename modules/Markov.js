@@ -58,7 +58,7 @@ class Markov {
       return phrase.join(' ') + ' ' + this.say(minLength).toLowerCase()
     }
 
-    return phrase.join(' ').replace(/[^\wа-яА-Я")]$/, "") + '.'
+    return phrase.join(' ').replace(/[^\waA-zZаА-яА-Я")]$/, "") + '.'
   }
 
   static choice(wordsArr) {
