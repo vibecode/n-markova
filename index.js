@@ -41,7 +41,7 @@ bot.hears([/^.*[Хх]ох.*$/gm,  /^.*[Уу]кр.*$/gm], ctx => {
   generateReply(ctx, ctx.match, {reply_to_message_id: ctx.message.message_id})
 })
 
-bot.command("nat", ctx => {
+bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
     generateReply(ctx)
 })
 
