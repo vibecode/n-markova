@@ -33,7 +33,12 @@ bot.mention('natassha_bot', async ctx => {
 //TODO update phrase
 bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', {reply_to_message_id: ctx.message.message_id}))
 
-bot.hears([/^.*[Оо]нтолог.*$/gm, /^.*[Мм]аг.*$/gm,/^.*[Рр]изом.*$/gm, /^.*тел.*$/gm, /^.*орган.*$/gm, /^.*письм.*$/gm, /^.*анус.*$/gm, /^.*[Дд]еррид.*$/gm, /^.*[Дд]елез.*$/gm], ctx => {
+bot.hears(
+  [/^.*[Аа]теи.*$/gm,
+   /^.*[Нн]абоков.*$/gm,
+   /^.*[Лл]итература.*$/gm,
+   /^.*[Сс]тажер.*$/gm,
+   /^.*[Оо]нтолог.*$/gm, /^.*[Мм]аг.*$/gm,/^.*[Рр]изом.*$/gm, /^.*тел.*$/gm, /^.*орган.*$/gm, /^.*письм.*$/gm, /^.*анус.*$/gm, /^.*[Дд]еррид.*$/gm, /^.*[Дд]елез.*$/gm], ctx => {
   generateReply(ctx, ctx.match,  {reply_to_message_id: ctx.message.message_id})
 })
 
@@ -45,7 +50,7 @@ bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
     generateReply(ctx)
 })
 
-bot.hears([/^.*[Лл]еня.*$/gm,  /^.*[Лл]еони.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
+bot.hears([/^.*[Лл]еня.*$/gm,  /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
   try {
     await ctx.replyWithSticker('CAADBQADRwADRWMpEsuzZEkvMI9UAg')
   } catch (err) {
