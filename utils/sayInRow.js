@@ -8,7 +8,7 @@ module.exports = async function sayInRow(phrasesArr, ctx, opts) {
 }
 
 function promiseDelay(timeout) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), timeout)
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, timeout)
   })
 }
