@@ -1,14 +1,15 @@
 require('dotenv').config()
 const config = require('./config')
-const data = require('./data/natasha')
+const data = require('./data/texts')
 const express = require('express')
 const app = express()
 const _ = require('lodash')
 const sayInRow = require('./utils/sayInRow')
 const triggers = require('./constants/triggers')
+const renderLyrics = require('./handlers/renderLyrics')
 
 const Telegraf = require('telegraf')
-const generateReply = require('./handlers/generateReply')
+const generateReply = require('./handlers/renderReply')
 
 const { URL, API_KEY, PORT } = config
 
@@ -46,10 +47,6 @@ bot.hears(triggers, ctx => {
     generateReply(ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
   })
 
-bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
-  generateReply(ctx)
-})
-
 bot.hears([/^.*[Лл]еня.*$/gm, /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
   try {
     await ctx.replyWithSticker('CAADBQADRwADRWMpEsuzZEkvMI9UAg')
@@ -57,6 +54,15 @@ bot.hears([/^.*[Лл]еня.*$/gm, /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/g
     console.log(err)
   }
 })
+
+bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
+  generateReply(ctx)
+})
+
+bot.command(["stih", "stihi"], ctx => {
+  renderLyrics(ctx)
+})
+
 
 bot.on('sticker', ctx => console.log(ctx.message.sticker))
 

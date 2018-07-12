@@ -1,5 +1,5 @@
 const Markov = require('../modules/Markov')
-const data = require('../data/natasha')
+const data = require('../data/texts')
 const cleanFood = require('../utils/cleanFood')
 
 module.exports = function(ctx, input, opts) {
