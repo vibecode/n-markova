@@ -49,13 +49,21 @@ bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
 
 bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
 
-bot.hears(triggers, ctx => {
+bot.hears(triggers.common, ctx => {
   renderReply(markov, ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
 })
 
-bot.hears([/^.*[Лл]еня.*$/gm, /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
+bot.hears(triggers.myher, async ctx => {
   try {
     await ctx.replyWithSticker('CAADBQADRwADRWMpEsuzZEkvMI9UAg')
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+bot.hears(triggers.death, async ctx => {
+  try {
+    await ctx.replyWithSticker('CAADBQADKgADRWMpEpDaQiZ-o0X6Ag')
   } catch (err) {
     console.log(err)
   }
@@ -68,7 +76,6 @@ bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
 bot.command(["stih", "stihi"], ctx => {
   renderLyrics(ctx)
 })
-
 
 bot.on('sticker', ctx => console.log(ctx.message.sticker))
 
