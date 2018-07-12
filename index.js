@@ -5,6 +5,7 @@ const express = require('express')
 const app = express()
 const _ = require('lodash')
 const sayInRow = require('./utils/sayInRow')
+const triggers = require('./constants/triggers')
 
 const Telegraf = require('telegraf')
 const generateReply = require('./handlers/generateReply')
@@ -41,34 +42,9 @@ bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
 
 bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
 
-bot.hears(
-  [
-    /^.*[Аа]теи.*$/gm,
-    /^.*[Нн]абоков.*$/gm,
-    /^.*[Рр]озанов.*$/gm,
-    /^.*[Гг]алковск.*$/gm,
-    /^.*[Дд]остоевск.*$/gm,
-    /^.*[Лл]итература.*$/gm,
-    /^.*[Сс]тажер.*$/gm,
-    /^.*[Оо]нтолог.*$/gm,
-    /^.*[Пп]сих.*$/gm,
-    /^.*[Шш]изо.*$/gm,
-    /^.*[Мм]аг.*$/gm,
-    /^.*[Рр]изом.*$/gm,
-    /^.*тел.*$/gm, /^.*орган.*$/gm,
-    /^.*письм.*$/gm,
-    /^.*анус.*$/gm,
-    /^.*[Лл][Оо][Лл].*$/gm,
-    /^.*[Дд]еррид.*$/gm,
-    /^.*[Лл]акан.*$/gm,
-    /^.*[Дд]елез.*$/gm
-  ], ctx => {
+bot.hears(triggers, ctx => {
     generateReply(ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
   })
-
-bot.hears([/^.*[Хх]ох.*$/gm, /^.*[Уу]кр.*$/gm], ctx => {
-  generateReply(ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
-})
 
 bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
   generateReply(ctx)
