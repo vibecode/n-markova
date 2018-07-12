@@ -1,11 +1,15 @@
 require('dotenv').config()
 const config = require('./config')
 const data = require('./data/natasha')
+const express = require('express')
+const expressApp = express()
 
 const Telegraf = require('telegraf')
 const generateReply = require('./handlers/generateReply')
 
-const bot = new Telegraf(config.apiKey)
+const { URL, API_KEY, PORT} = config
+
+const bot = new Telegraf(API_KEY)
 
 bot.telegram
    .getMe()
@@ -68,13 +72,23 @@ bot.hears([/^.*[Лл]еня.*$/gm,  /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/
   try {
     await ctx.replyWithSticker('CAADBQADRwADRWMpEsuzZEkvMI9UAg')
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
 })
 
 bot.on('sticker', ctx => console.log(ctx.message.sticker))
 
-bot.startPolling()
+// bot.startPolling()
+
+bot.telegram.setWebhook(`${URL}/bot${API_KEY}`)
+expressApp.use(bot.webhookCallback(`/bot${API_KEY}`))
+
+expressApp.get('/', (req, res) => {
+  res.send('мое бытие проявлено');
+})
+expressApp.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
 
 async function sayInRow(phrasesArr, ctx, opts) {
   await ctx.reply(phrasesArr[0], opts)
