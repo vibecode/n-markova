@@ -1,6 +1,6 @@
 const Markov = require('../modules/Markov')
 const data = require('../data/natasha')
-const cleanFood = require('../modules/cleanFood')
+const cleanFood = require('../utils/cleanFood')
 
 module.exports = function(ctx, input, opts) {
   const foodSource = data.text.split('. ')

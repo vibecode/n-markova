@@ -4,6 +4,7 @@ const data = require('./data/natasha')
 const express = require('express')
 const app = express()
 const _ = require('lodash')
+const sayInRow = require('./utils/sayInRow')
 
 const Telegraf = require('telegraf')
 const generateReply = require('./handlers/generateReply')
@@ -21,18 +22,18 @@ bot.telegram
      BOT_USERNAME = botInfo.username
    })
 
-bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
+bot.mention(process.env.BOT_USERNAME, async ctx => {
   try {
-    await sayInRow(data.bytie, ctx, { reply_to_message_id: ctx.message.message_id })
+    const phrases = data.bytie.slice(1)
+    await sayInRow(phrases, ctx, { reply_to_message_id: ctx.message.message_id })
   } catch (err) {
     console.log(err)
   }
 })
 
-bot.mention('natassha_bot', async ctx => {
+bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
   try {
-    const phrases = data.bytie.slice(1)
-    await sayInRow(phrases, ctx, { reply_to_message_id: ctx.message.message_id })
+    await sayInRow(data.bytie, ctx, { reply_to_message_id: ctx.message.message_id })
   } catch (err) {
     console.log(err)
   }
@@ -101,11 +102,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`HTTP Server running on port ${PORT}`)
 })
-
-async function sayInRow(phrasesArr, ctx, opts) {
-  await ctx.reply(phrasesArr[0], opts)
-
-  for (let i = 1; i < phrasesArr.length; i++) {
-    await ctx.reply(phrasesArr[i])
-  }
-}
