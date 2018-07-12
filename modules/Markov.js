@@ -1,5 +1,3 @@
-//TODO comment everything
-
 class Markov {
   constructor(food) {
     this._food = food
@@ -67,7 +65,8 @@ class Markov {
   }
 
   static reduceReply(reply) {
-    return reply.toString().trim().split(' ')
+    return reply.toString().trim()
+                .split(' ')
                 .filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
   }
 }

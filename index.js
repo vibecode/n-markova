@@ -1,17 +1,23 @@
 require('dotenv').config()
 const config = require('./config')
-const data = require('./data/texts')
 const express = require('express')
 const app = express()
 const _ = require('lodash')
 const sayInRow = require('./utils/sayInRow')
 const triggers = require('./constants/triggers')
 const renderLyrics = require('./handlers/renderLyrics')
+const renderReply = require('./handlers/renderReply')
+const Markov = require('./modules/Markov')
+const data = require('./data/texts')
 
+const cleanFood = require('./utils/cleanFood')
 const Telegraf = require('telegraf')
-const generateReply = require('./handlers/renderReply')
 
 const { URL, API_KEY, PORT } = config
+
+const foodSource = data.text.split('. ')
+const food = cleanFood(foodSource)
+const markov = new Markov(food)
 
 const bot = new Telegraf(API_KEY)
 
@@ -44,8 +50,8 @@ bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
 bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
 
 bot.hears(triggers, ctx => {
-    generateReply(ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
-  })
+  renderReply(markov, ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
+})
 
 bot.hears([/^.*[Лл]еня.*$/gm, /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/gm], async ctx => {
   try {
@@ -56,7 +62,7 @@ bot.hears([/^.*[Лл]еня.*$/gm, /^.*[Лл]ео.*$/gm, /^.*[Мм]ухер.*$/g
 })
 
 bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
-  generateReply(ctx)
+  renderReply(markov, ctx)
 })
 
 bot.command(["stih", "stihi"], ctx => {
@@ -69,8 +75,8 @@ bot.on('sticker', ctx => console.log(ctx.message.sticker))
 bot.on('message', ctx => {
   const isReplyToBot = _.get(ctx.message, 'reply_to_message.from.username') === BOT_USERNAME
 
-  if(isReplyToBot) {
-    generateReply(ctx, ctx.message.text, { reply_to_message_id: ctx.message.message_id })
+  if (isReplyToBot) {
+    renderReply(markov, ctx, ctx.message.text, { reply_to_message_id: ctx.message.message_id })
   }
 })
 
