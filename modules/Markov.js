@@ -35,7 +35,13 @@ class Markov {
       const replyArr = Markov.reduceReply(reply)
 
       const startWordLower = Markov.choice(replyArr)
-      word = startWordLower.replace(/^./, c => c.toUpperCase())
+
+      if (startWordLower && typeof startWordLower === 'string') {
+        word = startWordLower.replace(/^./, c => c.toUpperCase())
+      } else {
+        word = ''
+      }
+
     } else {
       word = Markov.choice(this._startWords)
     }
@@ -65,7 +71,8 @@ class Markov {
   }
 
   static reduceReply(reply) {
-    return reply.toString().trim().split(' ').filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
+    return reply.toString().trim().split(' ')
+                .filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
   }
 }
 
