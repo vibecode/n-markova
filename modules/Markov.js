@@ -65,9 +65,7 @@ class Markov {
   }
 
   static reduceReply(reply) {
-    return reply.toString().trim()
-                .split(' ')
-                .filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
+    return reply.toString().trim().split(' ').filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
   }
 }
 
