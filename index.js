@@ -77,9 +77,17 @@ bot.command(["stih", "stihi"], ctx => {
   renderLyrics(ctx)
 })
 
-bot.on('sticker', ctx => console.log(ctx.message.sticker))
+// bot.on('sticker', ctx => console.log(ctx.message.sticker))
 
 bot.on('message', ctx => {
+  const { message } = ctx
+  const username = _.get(message, 'from.username')
+  const text = _.get(message, 'text')
+
+  if (text) {
+    console.log('@' + username + ': ' + text)
+  }
+
   const isReplyToBot = _.get(ctx.message, 'reply_to_message.from.username') === BOT_USERNAME
 
   if (isReplyToBot) {
