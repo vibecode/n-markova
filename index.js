@@ -9,6 +9,10 @@ const renderLyrics = require('./handlers/renderLyrics')
 const renderReply = require('./handlers/renderReply')
 const Markov = require('./modules/Markov')
 const data = require('./data/texts')
+const Random = require('random-js')
+const moment = require('moment')
+
+const random = new Random(Random.engines.mt19937().autoSeed())
 
 const cleanFood = require('./utils/cleanFood')
 const Telegraf = require('telegraf')
@@ -29,6 +33,16 @@ bot.telegram
      bot.options.username = botInfo.username
      BOT_USERNAME = botInfo.username
    })
+
+bot.start(async ctx => {
+  try {
+    await ctx.reply('Мое бытие проявлено')
+  } catch (err) {
+    console.log(err)
+  }
+
+  sayRandomDaily(ctx, 0)
+})
 
 bot.mention(process.env.BOT_USERNAME, async ctx => {
   try {
@@ -94,6 +108,22 @@ bot.on('message', ctx => {
     renderReply(markov, ctx, ctx.message.text, { reply_to_message_id: ctx.message.message_id })
   }
 })
+
+function sayRandomDaily(ctx, leftToDayEnd) {
+  const maxTime = 86400000//ms in 24 hours
+  const randomTime = random.integer(0, maxTime) + leftToDayEnd
+
+  setTimeout(() => {
+    renderReply(markov, ctx)
+
+    //set new timeout at the end of the day
+    const now = moment().valueOf()
+    const endOfDay = moment().endOf('day').valueOf()
+    const leftToDayEnd = endOfDay - now
+
+    sayRandomDaily(ctx, leftToDayEnd)
+  }, randomTime)
+}
 
 bot.telegram.setWebhook(`${URL}/bot${API_KEY}`)
 app.use(bot.webhookCallback(`/bot${API_KEY}`))
