@@ -1,18 +1,15 @@
 require('dotenv').config()
+const _ = require('lodash')
 const config = require('./config')
 const express = require('express')
 const app = express()
-const _ = require('lodash')
 const sayInRow = require('./utils/sayInRow')
 const triggers = require('./constants/triggers')
 const renderLyrics = require('./handlers/renderLyrics')
 const renderReply = require('./handlers/renderReply')
+const sayRandomDaily = require('./modules/sayRandomDaily')
 const Markov = require('./modules/Markov')
 const data = require('./data/texts')
-const Random = require('random-js')
-const moment = require('moment')
-
-const random = new Random(Random.engines.mt19937().autoSeed())
 
 const cleanFood = require('./utils/cleanFood')
 const Telegraf = require('telegraf')
@@ -34,7 +31,9 @@ bot.telegram
      BOT_USERNAME = botInfo.username
    })
 
-//logging
+sayRandomDaily(bot, markov, 0)
+
+//logging incoming messages
 bot.use((ctx, next) => {
   const { message } = ctx
   const username = _.get(message, 'from.username')
@@ -53,8 +52,6 @@ bot.start(async ctx => {
   } catch (err) {
     console.log(err)
   }
-
-  sayRandomDaily(ctx, 0)
 })
 
 bot.mention(process.env.BOT_USERNAME, async ctx => {
@@ -115,22 +112,6 @@ bot.on('message', ctx => {
     renderReply(markov, ctx, message.text, { reply_to_message_id: message.message_id })
   }
 })
-
-function sayRandomDaily(ctx, leftToDayEnd) {
-  const maxTime = 86400000//ms in 24 hours
-  const randomTime = random.integer(0, maxTime) + leftToDayEnd
-
-  setTimeout(() => {
-    renderReply(markov, ctx)
-
-    //set new timeout at the end of the day
-    const now = moment().valueOf()
-    const endOfDay = moment().endOf('day').valueOf()
-    const leftToDayEnd = endOfDay - now
-
-    sayRandomDaily(ctx, leftToDayEnd)
-  }, randomTime)
-}
 
 bot.telegram.setWebhook(`${URL}/bot${API_KEY}`)
 app.use(bot.webhookCallback(`/bot${API_KEY}`))
