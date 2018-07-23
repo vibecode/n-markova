@@ -9,6 +9,7 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
 
   setTimeout(async () => {
     const text = markov.say()
+
     try {
       await  bot.telegram.sendMessage(336222660, text)
     } catch (err) {
@@ -20,6 +21,6 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
     const endOfDay = moment().endOf('day').valueOf()
     const leftToDayEnd = endOfDay - now
 
-    sayRandomDaily(bot, leftToDayEnd)
+    sayRandomDaily(bot, markov, leftToDayEnd)
   }, randomTime)
 }
