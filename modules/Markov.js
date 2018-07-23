@@ -1,3 +1,7 @@
+const Random = require('random-js')
+
+const random = new Random(Random.engines.mt19937().autoSeed())
+
 class Markov {
   constructor(food) {
     this._food = food
@@ -66,12 +70,18 @@ class Markov {
   }
 
   static choice(wordsArr) {
-    const i = Math.floor(wordsArr.length * Math.random())
-    return wordsArr[i]
+    const max = wordsArr.length - 1
+    const randomIdx = random.integer(0, max)
+
+    //old random
+    // const i = Math.floor(wordsArr.length * Math.random())
+    return wordsArr[randomIdx]
   }
 
   static reduceReply(reply) {
-    return reply.toString().trim().split(' ')
+    return reply.toString()
+                .trim()
+                .split(' ')
                 .filter(word => word.match(/([а-яА-Яa-zA-Z])/g))
   }
 }
