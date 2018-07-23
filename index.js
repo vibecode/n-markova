@@ -34,6 +34,19 @@ bot.telegram
      BOT_USERNAME = botInfo.username
    })
 
+//logging
+bot.use((ctx, next) => {
+  const { message } = ctx
+  const username = _.get(message, 'from.username')
+  const text = _.get(message, 'text', '***нет текста***')
+  const chat_id = _.get(message, 'chat.id')
+
+  console.log('chat_id: ' + chat_id)
+  console.log('@' + username + ': ' + text)
+
+  return next(ctx)
+})
+
 bot.start(async ctx => {
   try {
     await ctx.reply('Мое бытие проявлено')
@@ -95,17 +108,11 @@ bot.command(["stih", "stihi"], ctx => {
 
 bot.on('message', ctx => {
   const { message } = ctx
-  const username = _.get(message, 'from.username')
-  const text = _.get(message, 'text')
 
-  if (text) {
-    console.log('@' + username + ': ' + text)
-  }
-
-  const isReplyToBot = _.get(ctx.message, 'reply_to_message.from.username') === BOT_USERNAME
+  const isReplyToBot = _.get(message, 'reply_to_message.from.username') === BOT_USERNAME
 
   if (isReplyToBot) {
-    renderReply(markov, ctx, ctx.message.text, { reply_to_message_id: ctx.message.message_id })
+    renderReply(markov, ctx, message.text, { reply_to_message_id: message.message_id })
   }
 })
 
