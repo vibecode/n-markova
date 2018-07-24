@@ -128,5 +128,5 @@ app.listen(PORT, () => {
 
 //keep heroku app awake
 setInterval(() => {
-  http.get(config.URL)
+  http.get('http://n-markova.herokuapp.com')
 }, 300000) // every 5 minutes (300000)
