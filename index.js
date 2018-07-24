@@ -1,5 +1,6 @@
 require('dotenv').config()
 const _ = require('lodash')
+const  http = require("http")
 const config = require('./config')
 const express = require('express')
 const app = express()
@@ -31,7 +32,7 @@ bot.telegram
      BOT_USERNAME = botInfo.username
    })
 
-sayRandomDaily(bot, markov, 0)
+sayRandomDaily(bot, markov)
 
 //logging incoming messages
 bot.use((ctx, next) => {
@@ -123,3 +124,9 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`HTTP Server running on port ${PORT}`)
 })
+
+
+//keep heroku app awake
+setInterval(() => {
+  http.get(config.URL)
+}, 300000) // every 5 minutes (300000)
