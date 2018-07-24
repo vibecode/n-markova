@@ -9,12 +9,12 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
 
   setTimeout(async () => {
     const text = markov.say()
+    const chats = [
+      336222660, //dev
+      499447942, //eg
+    ]
 
-    try {
-      await  bot.telegram.sendMessage(336222660, text)
-    } catch (err) {
-      console.log(err)
-    }
+    chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, text).catch(err => console.log(err)))
 
     //set new timeout at the end of the day
     const now = moment().valueOf()
