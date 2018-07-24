@@ -3,9 +3,9 @@ const Random = require('random-js')
 
 const random = new Random(Random.engines.mt19937().autoSeed())
 
-module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
-  const maxTime = 5000 //86400000 ms in 24 hours
-  const randomTime = random.integer(0, maxTime) + leftToDayEnd
+module.exports = function sayRandomDaily(bot, markov) {
+  const maxTime = 3600000 //86400000 ms in 24 hours
+  const randomTime = random.integer(0, maxTime) // + leftToDayEnd
 
   setTimeout(async () => {
     const text = markov.say()
@@ -17,10 +17,10 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
     chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, text).catch(err => console.log(err)))
 
     //set new timeout at the end of the day
-    const now = moment().valueOf()
-    const endOfDay = moment().endOf('day').valueOf()
-    const leftToDayEnd = endOfDay - now
+    // const now = moment().valueOf()
+    // const endOfDay = moment().endOf('day').valueOf()
+    // const leftToDayEnd = endOfDay - now
 
-    sayRandomDaily(bot, markov, leftToDayEnd)
+    sayRandomDaily(bot, markov)
   }, randomTime)
 }
