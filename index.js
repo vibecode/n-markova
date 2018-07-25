@@ -55,12 +55,29 @@ bot.start(async ctx => {
   }
 })
 
-bot.mention(process.env.BOT_USERNAME, async ctx => {
-  try {
-    const phrases = data.bytie.slice(1)
-    await sayInRow(phrases, ctx, { reply_to_message_id: ctx.message.message_id })
-  } catch (err) {
-    console.log(err)
+bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
+  renderReply(markov, ctx)
+})
+
+bot.command(["stih", "stihi"], ctx => {
+  renderLyrics(ctx)
+})
+
+bot.command(["man"], async ctx => {
+
+  const text = _.get(ctx, 'message.text').replace(/\/man/gm, "").trim()
+  const chats = config.CHATS
+
+  console.log('cleared ' + text);
+  function broadcast(message) {
+    chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, message).catch(err => console.log(err)))
+  }
+
+  if (text) {
+    broadcast(text)
+  } else {
+    const textRandom = markov.say()
+    broadcast(textRandom)
   }
 })
 
@@ -71,8 +88,6 @@ bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
     console.log(err)
   }
 })
-
-bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
 
 bot.hears(triggers.common, ctx => {
   renderReply(markov, ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
@@ -94,12 +109,15 @@ bot.hears(triggers.death, async ctx => {
   }
 })
 
-bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
-  renderReply(markov, ctx)
-})
+bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
 
-bot.command(["stih", "stihi"], ctx => {
-  renderLyrics(ctx)
+bot.mention(process.env.BOT_USERNAME, async ctx => {
+  try {
+    const phrases = data.bytie.slice(1)
+    await sayInRow(phrases, ctx, { reply_to_message_id: ctx.message.message_id })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 // bot.on('sticker', ctx => console.log(ctx.message.sticker))

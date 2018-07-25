@@ -1,5 +1,6 @@
 const moment = require('moment')
 const Random = require('random-js')
+const config = require('../config')
 
 const random = new Random(Random.engines.mt19937().autoSeed())
 
@@ -11,11 +12,7 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
 
   setTimeout(async () => {
     const text = markov.say()
-    const chats = [
-      336222660, //dev
-      499447942, //eg
-      503936596, //'undefined'
-    ]
+    const chats = config.CHATS
 
     chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, text).catch(err => console.log(err)))
 
