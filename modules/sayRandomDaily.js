@@ -14,6 +14,7 @@ module.exports = function sayRandomDaily(bot, markov, leftToDayEnd) {
     const chats = [
       336222660, //dev
       499447942, //eg
+      503936596, //'undefined'
     ]
 
     chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, text).catch(err => console.log(err)))
