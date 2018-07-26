@@ -64,16 +64,17 @@ bot.command(["stih", "stihi"], ctx => {
 })
 
 bot.command(["man"], async ctx => {
+  const username = _.get(ctx, 'message.from.username', '***unknown***')
 
   const text = _.get(ctx, 'message.text').replace(/\/man/gm, "").trim()
   const chats = config.CHATS
 
-  console.log('cleared ' + text);
+  console.log('cleared: ' + text);
   function broadcast(message) {
     chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, message).catch(err => console.log(err)))
   }
 
-  if (text) {
+  if (text && username === 'muflisme') {
     broadcast(text)
   } else {
     const textRandom = markov.say()
