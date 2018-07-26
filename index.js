@@ -37,7 +37,7 @@ sayRandomDaily(bot, markov)
 //logging incoming messages
 bot.use((ctx, next) => {
   const { message } = ctx
-  const username = _.get(message, 'from.username')
+  const username = _.get(message, 'from.username', '***unknown***')
   const text = _.get(message, 'text', '***нет текста***')
   const chat_id = _.get(message, 'chat.id')
 
