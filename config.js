@@ -5,6 +5,7 @@ module.exports = {
    CHATS: [
     336222660, //dev
     499447942, //eg
+    141247418, //cc
     503936596, //'undefined'
   ]
 }
