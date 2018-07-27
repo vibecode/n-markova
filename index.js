@@ -32,7 +32,9 @@ bot.telegram
      BOT_USERNAME = botInfo.username
    })
 
-sayRandomDaily(bot, markov)
+if (config.AUTO) {
+  sayRandomDaily(bot, markov)
+}
 
 //logging incoming messages
 bot.use((ctx, next) => {

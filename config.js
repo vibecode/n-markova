@@ -7,5 +7,6 @@ module.exports = {
     499447942, //eg
     141247418, //cc
     503936596, //'undefined'
-  ]
+  ],
+  AUTO: false
 }
