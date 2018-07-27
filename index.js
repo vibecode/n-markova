@@ -84,6 +84,8 @@ bot.command(["man"], async ctx => {
   }
 })
 
+
+
 bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
   try {
     await sayInRow(data.bytie, ctx, { reply_to_message_id: ctx.message.message_id })
