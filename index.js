@@ -39,12 +39,16 @@ if (config.AUTO) {
 //logging incoming messages
 bot.use((ctx, next) => {
   const { message } = ctx
+  const chatId = _.get(message, 'chat.id')
+  const firstName = _.get(message, 'from.first_name', '***unknown***')
+  const lastName = _.get(message, 'from.last_name', '***unknown***')
   const username = _.get(message, 'from.username', '***unknown***')
   const text = _.get(message, 'text', '***нет текста***')
-  const chat_id = _.get(message, 'chat.id')
 
-  console.log('chat_id: ' + chat_id)
-  console.log('@' + username + ': ' + text)
+  console.log('chat id: ' + chatId)
+  console.log('name: '+ firstName + ' ' + lastName);
+  console.log('username: @' + username)
+  console.log('text: ' + text)
 
   return next(ctx)
 })

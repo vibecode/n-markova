@@ -5,8 +5,9 @@ module.exports = {
    CHATS: [
     336222660, //dev
     499447942, //eg
-    141247418, //cc
-    503936596, //'undefined'
+    141247418, //cc //blocked
+    503936596, //'undefined '
+    552442010 // new unknown
   ],
   AUTO: false
 }
