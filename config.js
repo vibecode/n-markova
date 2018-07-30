@@ -6,7 +6,6 @@ module.exports = {
     336222660, //dev
     499447942, //eg
     503936596, //'undefined '
-    552442010 // new unknown
   ],
   AUTO: false
 }
