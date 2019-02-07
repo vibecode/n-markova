@@ -1,6 +1,6 @@
 require('dotenv').config()
 const _ = require('lodash')
-const  http = require("http")
+const http = require('http')
 const config = require('./config')
 const express = require('express')
 const app = express()
@@ -25,12 +25,10 @@ const bot = new Telegraf(API_KEY)
 
 let BOT_USERNAME = ''
 
-bot.telegram
-   .getMe()
-   .then((botInfo) => {
-     bot.options.username = botInfo.username
-     BOT_USERNAME = botInfo.username
-   })
+bot.telegram.getMe().then(botInfo => {
+  bot.options.username = botInfo.username
+  BOT_USERNAME = botInfo.username
+})
 
 if (config.AUTO) {
   sayRandomDaily(bot, markov)
@@ -46,7 +44,7 @@ bot.use((ctx, next) => {
   const text = _.get(message, 'text', '***нет текста***')
 
   console.log('chat id: ' + chatId)
-  console.log('name: '+ firstName + ' ' + lastName);
+  console.log('name: ' + firstName + ' ' + lastName)
   console.log('username: @' + username)
   console.log('text: ' + text)
 
@@ -61,23 +59,27 @@ bot.start(async ctx => {
   }
 })
 
-bot.command(["natash", "natasha", "nat", "n", "diagnosis"], ctx => {
+bot.command(['natash', 'natasha', 'nat', 'n', 'diagnosis'], ctx => {
   renderReply(markov, ctx)
 })
 
-bot.command(["stih", "stihi"], ctx => {
+bot.command(['stih', 'stihi'], ctx => {
   renderLyrics(ctx)
 })
 
-bot.command(["man"], async ctx => {
+bot.command(['man'], async ctx => {
   const username = _.get(ctx, 'message.from.username', '***unknown***')
 
-  const text = _.get(ctx, 'message.text').replace(/\/man/gm, "").trim()
+  const text = _.get(ctx, 'message.text')
+    .replace(/\/man/gm, '')
+    .trim()
   const chats = config.CHATS
 
-  console.log('cleared: ' + text);
+  console.log('cleared: ' + text)
   function broadcast(message) {
-    chats.forEach(chat_id => bot.telegram.sendMessage(chat_id, message).catch(err => console.log(err)))
+    chats.forEach(chat_id =>
+      bot.telegram.sendMessage(chat_id, message).catch(err => console.log(err))
+    )
   }
 
   if (text && username === 'muflisme') {
@@ -88,18 +90,20 @@ bot.command(["man"], async ctx => {
   }
 })
 
-
-
 bot.hears(/^.*[Бб]ыти.*$/gm, async ctx => {
   try {
-    await sayInRow(data.bytie, ctx, { reply_to_message_id: ctx.message.message_id })
+    await sayInRow(data.bytie, ctx, {
+      reply_to_message_id: ctx.message.message_id
+    })
   } catch (err) {
     console.log(err)
   }
 })
 
 bot.hears(triggers.common, ctx => {
-  renderReply(markov, ctx, ctx.match, { reply_to_message_id: ctx.message.message_id })
+  renderReply(markov, ctx, ctx.match, {
+    reply_to_message_id: ctx.message.message_id
+  })
 })
 
 bot.hears(triggers.myher, async ctx => {
@@ -118,12 +122,16 @@ bot.hears(triggers.death, async ctx => {
   }
 })
 
-bot.mention('muflisme', ctx => ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id }))
+bot.mention('muflisme', ctx =>
+  ctx.reply('Героям Слава!', { reply_to_message_id: ctx.message.message_id })
+)
 
 bot.mention(process.env.BOT_USERNAME, async ctx => {
   try {
     const phrases = data.bytie.slice(1)
-    await sayInRow(phrases, ctx, { reply_to_message_id: ctx.message.message_id })
+    await sayInRow(phrases, ctx, {
+      reply_to_message_id: ctx.message.message_id
+    })
   } catch (err) {
     console.log(err)
   }
@@ -134,10 +142,13 @@ bot.mention(process.env.BOT_USERNAME, async ctx => {
 bot.on('message', ctx => {
   const { message } = ctx
 
-  const isReplyToBot = _.get(message, 'reply_to_message.from.username') === BOT_USERNAME
+  const isReplyToBot =
+    _.get(message, 'reply_to_message.from.username') === BOT_USERNAME
 
   if (isReplyToBot) {
-    renderReply(markov, ctx, message.text, { reply_to_message_id: message.message_id })
+    renderReply(markov, ctx, message.text, {
+      reply_to_message_id: message.message_id
+    })
   }
 })
 
@@ -152,8 +163,7 @@ app.listen(PORT, () => {
   console.log(`HTTP Server running on port ${PORT}`)
 })
 
-
 //keep heroku app awake
-setInterval(() => {
-  http.get('http://n-markova.herokuapp.com')
-}, 1200000) // every 20 minutes (1 200 000)
+// setInterval(() => {
+//   http.get('http://n-markova.herokuapp.com')
+// }, 1200000) // every 20 minutes (1 200 000)
